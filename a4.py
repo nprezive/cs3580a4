@@ -2,6 +2,7 @@ import pandas as pd
 from scipy import stats
 import numpy as np
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 # import data file
 data = pd.read_csv("train.csv")
@@ -48,6 +49,63 @@ print("\tThe p value is less than .05, so we can reject the null hypothesis \
 and safely say there IS a relationship between the groups of the Pclass \
 column and passenger survival.\n")
 
-#*********************************
-# Part 2-a
-#*********************************
+#*****************************************************************************
+# Part 2-a  Scatterplot and linear regression for Sex vs Survived
+#*****************************************************************************
+
+print("What is the correlation of 'female' to survived? Visualize it with the \
+corresponding linear regression. What is the correlation of 'male' to \
+survived? Visualize it with the corresponding linear regression.")
+print("\tWe will make a scatterplot of Sex vs Survived and calculate the \
+regression. This will show us the strength of the relationship between Sex \
+and Survived.\n")
+
+# create a dataframe with just Survived and Sex. Use 0=female and 1=male
+df_SexSurvived = pd.concat(
+        [
+            data['Survived'], 
+            pd.get_dummies(data['Sex'])['male']
+        ], 
+        axis=1)
+df_SexSurvived = df_SexSurvived.rename(columns={"male":"Sex"})
+
+# calculate r value
+rValue = df_SexSurvived['Sex'].corr(df_SexSurvived['Survived'])
+
+# scatterplot
+plt.title('Correlation between Sex and Survived')
+plt.xlabel('Sex (0=female, 1=male)')
+plt.ylabel('Survived (0=false, 1=true)')
+plt.text(.5, .8, 'r value: {0:.3f}'.format(rValue))
+
+# regression line
+fit = np.polyfit(df_SexSurvived['Sex'], df_SexSurvived['Survived'], 1)
+fit_fn = np.poly1d(fit) 
+
+# plot both on a graph
+plt.plot(df_SexSurvived['Sex'], df_SexSurvived['Survived'], 'go', 
+            df_SexSurvived['Sex'], fit_fn(df_SexSurvived['Sex']), '--k')
+plt.show()
+
+# Explanation
+print("\tWith an r value of {0:.3f}, we can say that there is a moderate \
+relationship between Sex and Survival. Females are more likely to survive \
+than males.".format(rValue))
+
+
+###############################################################################
+# Part 2-b   Distributions of two columns
+###############################################################################
+
+print("Pick two columns for this question: Age and Fare. For the different \
+columns, are they all normal distributions? Visualize the distribution.\n")
+
+# Age
+df_Age = data['Age']
+df_Age.dropna(inplace=True)
+sns.distplot(df_Age)
+plt.show()
+
+# Fare
+sns.distplot(data['Fare'])
+plt.show()
