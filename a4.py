@@ -222,3 +222,29 @@ plt.show()
 ###############################################################################
 # Part 4:  Multivariate Visualization
 ###############################################################################
+
+print("Use a mutlivariate visualization (like a heat map).\n")
+print("\tProportion of survivors by Sex and Pclass\n")
+
+df_Age = data[['Age', 'Survived', 'Pclass', 'Sex']]
+df_Age.dropna(subset=['Age'], inplace=True)
+
+df_Age.loc[df_Age['Age'] <= 20,'AgeBucket'] = '0-20'
+df_Age.loc[(df_Age['Age'] > 20) & (df_Age['Age'] <= 40),'AgeBucket'] = '20-40'
+df_Age.loc[(df_Age['Age'] > 40) & (df_Age['Age'] <= 60),'AgeBucket'] = '40-60'
+df_Age.loc[df_Age['Age'] > 60,'AgeBucket'] = '>60'
+
+table = df_Age.pivot_table(values='Survived',index=['Pclass'], columns=['Sex', 'AgeBucket'])
+sns.heatmap(table, annot=True)
+plt.title("Proportion of survivors by Sex, Age, and Pclass")
+plt.show()
+
+
+###############################################################################
+# Part 5:  Small Report
+###############################################################################
+
+print("Small Report:")
+print("\tSex, Pclass, and Age are the best indicators of whether a passenger \
+survives the Titanic. The ANOVA at the beginning and the heatmap at the end \
+both give good support to those columns.")
