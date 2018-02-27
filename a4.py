@@ -3,6 +3,13 @@ from scipy import stats
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+from math import log
+
+def safe_ln(x):
+    if x <=0:
+        return 0
+    else:
+        return log(x)
 
 # import data file
 data = pd.read_csv("train.csv")
@@ -90,7 +97,7 @@ plt.show()
 # Explanation
 print("\tWith an r value of {0:.3f}, we can say that there is a moderate \
 relationship between Sex and Survival. Females are more likely to survive \
-than males.".format(rValue))
+than males.\n".format(rValue))
 
 
 ###############################################################################
@@ -98,14 +105,38 @@ than males.".format(rValue))
 ###############################################################################
 
 print("Pick two columns for this question: Age and Fare. For the different \
-columns, are they all normal distributions? Visualize the distribution.\n")
+columns, are they all normal distributions? Visualize the distribution. If it \
+is not a normal distribution, transform it. Visualize it again.\n")
+
+print("\tAge distribution:")
 
 # Age
+plt.title("Age Distribution")
 df_Age = data['Age']
 df_Age.dropna(inplace=True)
 sns.distplot(df_Age)
 plt.show()
+print("\tThe distribution is pretty normal, with only slight abberations. We \
+are OK to proceed.\n")
 
 # Fare
+print("\tFare Distribution:")
 sns.distplot(data['Fare'])
+plt.title("Fare Distribution")
 plt.show()
+print("\tThe distribution is not normal. We will try taking the natural log \
+of Fare.\n")
+
+print("\tln(Fare) Distribution:")
+data['ln_Fare'] = data['Fare'].map(safe_ln)
+sns.distplot(data['ln_Fare'])
+plt.title("Natural Log of Fare Distribution")
+plt.xlabel("Natural Log of Fare")
+plt.show()
+print("\tThe distribution is much more normal. We are OK to proceed.\n")
+
+
+###############################################################################
+# Part 3:  Bivariate Visualizations
+###############################################################################
+
