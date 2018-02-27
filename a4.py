@@ -5,6 +5,9 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from math import log
 
+# Remove annoying warning
+pd.options.mode.chained_assignment = None  # default='warn'
+
 def safe_ln(x):
     if x <=0:
         return 0
@@ -32,8 +35,8 @@ F, p = stats.f_oneway(d_data['male'], d_data['female'])
 # Explanation
 print("\tResults:\n\tF value: {0:.3f}\n\tp value: {1:.3e}\n".format(F,p))
 print("\tThe p value is less than .05, so we can reject the null hypothesis \
-and safely say there IS a relationship between the groups of the Sex column \
-and passenger survival.\n")
+and safely say there IS a difference between males and females with respect \
+to survival.\n")
 
 ###############################################################################
 # Part 1-b
@@ -53,8 +56,8 @@ F, p = stats.f_oneway(d_data2[1], d_data2[2], d_data2[3])
 # Explanation
 print("\tResults:\n\tF value: {0:.3f}\n\tp value: {1:.3e}\n".format(F,p))
 print("\tThe p value is less than .05, so we can reject the null hypothesis \
-and safely say there IS a relationship between the groups of the Pclass \
-column and passenger survival.\n")
+and safely say there IS a difference between at least two of the passenger \
+classes with respect to survival.\n")
 
 ###############################################################################
 # Part 2-a  Scatterplot and linear regression for Sex vs Survived
@@ -140,3 +143,82 @@ print("\tThe distribution is much more normal. We are OK to proceed.\n")
 # Part 3:  Bivariate Visualizations
 ###############################################################################
 
+print("Create 3 bivariate visualizations (e.g. scatterplot) between the \
+'Survived' column and another.\n")
+
+
+### Survived vs Pclass ###
+print("\tSurvived vs Pclass\n")
+
+# calculate r value
+rValue = data['Pclass'].corr(data['Survived'])
+
+# scatterplot
+plt.title('Correlation between Pclass and Survived')
+plt.xlabel('Passenger Class')
+plt.ylabel('Survived (0=false, 1=true)')
+plt.text(2, .8, 'r value: {0:.3f}'.format(rValue))
+
+# regression line
+fit = np.polyfit(data['Pclass'], data['Survived'], 1)
+fit_fn = np.poly1d(fit) 
+
+# plot both on a graph
+plt.plot(data['Pclass'], data['Survived'], 'go', 
+            data['Pclass'], fit_fn(data['Pclass']), '--k')
+plt.show()
+
+
+### Survived vs Age ###
+print("\tSurvived vs Age\n")
+
+df_Age = data[['Age', 'Survived']]
+df_Age.dropna(subset=['Age'], inplace=True)
+
+# calculate r value
+rValue = df_Age['Age'].corr(df_Age['Survived'])
+
+# scatterplot
+plt.title('Correlation between Age and Survived')
+plt.xlabel('Age')
+plt.ylabel('Survived (0=false, 1=true)')
+plt.text(40, .8, 'r value: {0:.3f}'.format(rValue))
+
+# regression line
+fit = np.polyfit(df_Age['Age'], df_Age['Survived'], 1)
+fit_fn = np.poly1d(fit) 
+
+# plot both on a graph
+plt.plot(df_Age['Age'], df_Age['Survived'], 'go', 
+            df_Age['Age'], fit_fn(df_Age['Age']), '--k')
+plt.show()
+
+
+### Survived vs Fare ###
+print("\tSurvived vs Fare\n")
+
+df_Fare = data[['Fare', 'Survived']]
+df_Fare.dropna(subset=['Fare'], inplace=True)
+
+# calculate r value
+rValue = df_Fare['Fare'].corr(df_Fare['Survived'])
+
+# scatterplot
+plt.title('Correlation between Fare and Survived')
+plt.xlabel('Fare')
+plt.ylabel('Survived (0=false, 1=true)')
+plt.text(40, .8, 'r value: {0:.3f}'.format(rValue))
+
+# regression line
+fit = np.polyfit(df_Fare['Fare'], df_Fare['Survived'], 1)
+fit_fn = np.poly1d(fit) 
+
+# plot both on a graph
+plt.plot(df_Fare['Fare'], df_Fare['Survived'], 'go', 
+            df_Fare['Fare'], fit_fn(df_Fare['Fare']), '--k')
+plt.show()
+
+
+###############################################################################
+# Part 4:  Multivariate Visualization
+###############################################################################
