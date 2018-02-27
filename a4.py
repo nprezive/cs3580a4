@@ -14,9 +14,9 @@ def safe_ln(x):
 # import data file
 data = pd.read_csv("train.csv")
 
-#**********************************
-#Part 1-a
-#**********************************
+###############################################################################
+# Part 1-a
+###############################################################################
 print("Perform an ANOVA on the 'Sex' column using 'Survived' as the \
 independent variable. What did you find? What does it mean?\n")
 print("\tWe will work with the null hypothesis: There is no relationship \
@@ -35,9 +35,9 @@ print("\tThe p value is less than .05, so we can reject the null hypothesis \
 and safely say there IS a relationship between the groups of the Sex column \
 and passenger survival.\n")
 
-#**********************************
-#Part 1-b
-#**********************************
+###############################################################################
+# Part 1-b
+###############################################################################
 print("Perform a similiar ANOVA on PClass using 'Survived' as the independent \
 variable. What did you find? What does it mean?\n")
 print("\tWe will work with the null hypothesis: There is no relationship \
@@ -56,9 +56,9 @@ print("\tThe p value is less than .05, so we can reject the null hypothesis \
 and safely say there IS a relationship between the groups of the Pclass \
 column and passenger survival.\n")
 
-#*****************************************************************************
+###############################################################################
 # Part 2-a  Scatterplot and linear regression for Sex vs Survived
-#*****************************************************************************
+###############################################################################
 
 print("What is the correlation of 'female' to survived? Visualize it with the \
 corresponding linear regression. What is the correlation of 'male' to \
